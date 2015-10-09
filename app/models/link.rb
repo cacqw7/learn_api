@@ -1,5 +1,10 @@
 class Link < ActiveRecord::Base
   before_save :save_link_thumbnail
+  before_save :validate_title
+  validates_presence_of :url
+  validates :url, :url => true
+
+
 
 private
   def save_link_thumbnail
@@ -15,5 +20,9 @@ private
     bad_codes = [403, 404]
     response = HTTParty.get(url)
     !bad_codes.include?(response.code)
+  end
+
+  def validate_title
+    self.title = self.url if self.title.blank?
   end
 end
