@@ -10,12 +10,9 @@ gem 'rack', github: "rack/rack"
 gem 'gravatar_image_tag'
 gem 'link_thumbnailer'
 gem 'httparty'
-# Use sqlite3 as the database for Active Record
-gem 'pg'
-# Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
 
-# Use Unicorn as the app server
+gem 'pg'
+gem 'bcrypt', '~> 3.1.7'
 gem 'puma'
 gem 'validate_url'
 
@@ -37,6 +34,7 @@ end
 group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'meta_request'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
