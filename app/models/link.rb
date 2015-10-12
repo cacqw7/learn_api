@@ -1,28 +1,30 @@
 class Link < ActiveRecord::Base
-  before_save :save_link_thumbnail
-  before_save :validate_title
+  before_save :save_link_properties
   validates_presence_of :url
   validates :url, :url => true
 
 
 
 private
-  def save_link_thumbnail
-    #set the default image
-    self.thumbnail_url = "missing_img.jpg"
+  def save_link_properties
+    link = LinkThumbnailer.generate(url)
 
-    link = LinkThumbnailer.generate(self.url)
-    return unless url = link.images.first.src.to_s
-    self.thumbnail_url = url if link_is_valid?(url)
+    if link.images.blank?
+      self.title = self.description = url
+    else
+      self.title = link.title if title.blank?
+      self.description = link.description if description.blank?
+      image_src = link.images.first.src
+      return if image_src.blank?
+      self.thumbnail_url = image_src if link_is_valid?(image_src)
+    end
+  rescue LinkThumbnailer::Exceptions => e
+    puts "\e[0;31m LinkThumbnailer raised #{e} \e[0m\n"
   end
 
   def link_is_valid?(url)
-    bad_codes = [403, 404]
+    good_codes = [200, 304]
     response = HTTParty.get(url)
-    !bad_codes.include?(response.code)
-  end
-
-  def validate_title
-    self.title = self.url if self.title.blank?
+    good_codes.include?(response.code)
   end
 end
