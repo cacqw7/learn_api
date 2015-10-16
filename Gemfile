@@ -16,7 +16,7 @@ gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
 gem 'puma'
 gem 'validate_url'
-
+gem 'github_api'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
