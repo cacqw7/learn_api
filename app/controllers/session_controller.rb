@@ -10,4 +10,8 @@ class SessionController < ApplicationController
     render json: user
   end
 
+  def logout
+    user = User.find_by(code: params[:access_code])
+    user.code = "0"
+  end
 end
